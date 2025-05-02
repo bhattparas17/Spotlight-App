@@ -1,29 +1,32 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { SafeAreaProvider} from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native";
+import {  ClerkLoaded, ClerkProvider } from '@clerk/clerk-expo'
+import { tokenCache } from '@clerk/clerk-expo/token-cache'
+import InitialLayout from "./components/InitialLayout";
+
+
+
+
+const publishablekey=process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+if (!publishablekey) {
+  throw new Error('Missing Publishable Key. Pleae set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env file');
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+  return ( 
+  <ClerkProvider tokenCache={tokenCache}  >
+    <ClerkLoaded>
+   {/* <Slot /> */}
+  <SafeAreaProvider>
+  
+    <SafeAreaView style={{ flex: 1,backgroundColor:"black" }}>
+<InitialLayout />
+  </SafeAreaView>
+  </SafeAreaProvider>
+  </ClerkLoaded>
+  
+  </ClerkProvider>
   );
 }
