@@ -45,7 +45,7 @@ export default function Login() {
     {/* Illustration Section */}
         <View style={styles.illustrationContainer}>
            <Image 
-           source={require("../../assets/images/Online wishes-bro.png")}
+           source={require("../../assets/images/online-wishes-bro.png")}
            style={styles.illustration} resizeMode="contain"/>
         </View>
 
